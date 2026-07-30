@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+#world wide web
 # shellcheck disable=SC2086
 
 check_subdomain() {
