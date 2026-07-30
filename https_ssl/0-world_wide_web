@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC2086
+
+check_subdomain() {
+    domain=$1
+    sub=$2
+    result=$(dig ${sub}.${domain} | awk '/^;; ANSWER SECTION:/{getline; print $4, $5}')
+    record_type=$(echo "$result" | awk '{print $1}')
+    destination=$(echo "$result" | awk '{print $2}')
+    echo "The subdomain $sub is a $record_type record and points to $destination"
+}
+
+domain=$1
+subdomain=$2
+
+if [ -n "$subdomain" ]; then
+    check_subdomain "$domain" "$subdomain"
+else
+    for sub in www lb-01 web-01 web-02; do
+        check_subdomain "$domain" "$sub"
+    done
+fi
+
